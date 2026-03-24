@@ -1,0 +1,212 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    height: 100%;
+    font-family: 'JetBrains Mono', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;          /* no horizontal scroll anywhere */
+    scrollbar-width: none;       /* Firefox */
+    -ms-overflow-style: none;    /* IE / Edge */
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;               /* Chrome / Safari / Opera */
+  }
+  body {
+    margin: 0;
+    min-width: 320px;
+    color: #0f172a;
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* diagonal linear gradient: bottom-left blue -> black center (50%) -> top-right purple */
+    background-image: linear-gradient(45deg, #2563eb 0%, #1e3a8a 15%, #000000 25%, #000000 75%, #581c87 85%, #7c3aed 100%);
+  }
+  @media (prefers-color-scheme: dark) {
+    body {
+      color: #e6eef8;
+      background-image: linear-gradient(45deg, #2563eb 0%, #1e3a8a 15%, #000000 25%, #000000 75%, #581c87 85%, #7c3aed 100%);
+    }
+  }
+}
+
+/* Gradient border for project cards */
+.gradient-border {
+  border-radius: 12px;
+  padding: 1px;
+  background: conic-gradient(from 180deg at 50% 50%, #3b82f6, #7c3aed, #3b82f6);
+}
+.gradient-border > .card-inner {
+  border-radius: 11px;
+  background-clip: padding-box;
+  background-color: rgba(255,255,255,0.03);
+  padding: 1rem;
+}
+.project-create {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+  min-height: 120px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  color: #e6eef8;
+}
+
+/* Rotating conic-gradient border for Create Project card */
+@keyframes rotate-conic {
+  from { --angle: 225deg; }
+  to   { --angle: 585deg; }
+}
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 225deg;
+  inherits: false;
+}
+.spinning-border {
+  border-radius: 16px;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--angle) at 50% 50%, 
+    transparent 0%, 
+    #3b82f6 5%, 
+    #60a5fa 10%, 
+    transparent 15%, 
+    transparent 50%, 
+    #a855f7 55%, 
+    #c084fc 60%, 
+    transparent 65%, 
+    transparent 100%
+  );
+  transition: --angle 0.3s ease;
+}
+
+.spinning-border:hover {
+  animation: rotate-conic 8s linear infinite;
+}
+
+/* Thin custom scrollbar for panels */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  display: block;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+}
+/* ══════════════════════════════════════════
+   NODE EDITOR – Glowing Rotating Border
+   ══════════════════════════════════════════ */
+@property --node-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes node-glow-spin {
+  from { --node-angle: 0deg; }
+  to   { --node-angle: 360deg; }
+}
+
+.node-glow-border {
+  position: relative;
+  border-radius: 16px;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--node-angle) at 50% 50%,
+    #3b82f6 0%,
+    #7c3aed 25%,
+    #a855f7 50%,
+    #2563eb 75%,
+    #3b82f6 100%
+  );
+  animation: node-glow-spin 4s linear infinite;
+  box-shadow:
+    0 0 12px 2px rgba(59, 130, 246, 0.25),
+    0 0 24px 4px rgba(168, 85, 247, 0.15);
+}
+
+/* Green-tinted variant for function nodes */
+.node-glow-border-fn {
+  background: conic-gradient(
+    from var(--node-angle) at 50% 50%,
+    #10b981 0%,
+    #3b82f6 25%,
+    #7c3aed 50%,
+    #3b82f6 75%,
+    #10b981 100%
+  );
+  box-shadow:
+    0 0 12px 2px rgba(16, 185, 129, 0.2),
+    0 0 24px 4px rgba(59, 130, 246, 0.15);
+}
+
+/* Amber-tinted variant for main node */
+.node-glow-border-main {
+  background: conic-gradient(
+    from var(--node-angle) at 50% 50%,
+    #f59e0b 0%,
+    #ef4444 25%,
+    #a855f7 50%,
+    #ef4444 75%,
+    #f59e0b 100%
+  );
+  box-shadow:
+    0 0 12px 2px rgba(245, 158, 11, 0.2),
+    0 0 24px 4px rgba(239, 68, 68, 0.15);
+}
+
+.node-inner-card {
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+/* Override xyflow default node styling */
+.react-flow__node {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 16px !important;
+}
+
+.react-flow__node.selected {
+  box-shadow: none !important;
+}
+
+.react-flow__node.selected .node-glow-border {
+  box-shadow:
+    0 0 16px 4px rgba(59, 130, 246, 0.4),
+    0 0 32px 8px rgba(168, 85, 247, 0.25);
+}
+
+/* Edge glow */
+.react-flow__edge path {
+  filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.3));
+}
+
+/* Minimap & controls fit dark theme */
+.react-flow__minimap {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Handle hover glow */
+.react-flow__handle:hover {
+  box-shadow: 0 0 8px 2px rgba(59, 130, 246, 0.6);
+}.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+}
+
